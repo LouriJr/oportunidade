@@ -1,10 +1,7 @@
-﻿using Exercicio.MinutoSeguros.Services.Interfaces;
-using Exercicio.MinutoSeguros.Model;
+﻿using Exercicio.MinutoSeguros.Model;
+using Exercicio.MinutoSeguros.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Exercicio.MinutoSeguros.Controllers
 {

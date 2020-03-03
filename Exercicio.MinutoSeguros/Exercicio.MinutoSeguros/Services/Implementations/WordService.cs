@@ -11,74 +11,47 @@ namespace Exercicio.MinutoSeguros.Services.Implementations
 	{
 		public IEnumerable<Word> ListWords(string text)
 		{
-			var filteredWords = Regex.Replace(string.Join(' ', text), "<.*?>", string.Empty);
+			var wordList = CleanText(text);
 
-			filteredWords = this.RemoveImproperWords(filteredWords);
+			var mostAddressedWords = from word in wordList
+									 where !string.IsNullOrWhiteSpace(word)
+									 orderby word
+									 group word by word into wordGroup
 
-			var wordList = filteredWords.Split(" ").Where(x => x != string.Empty);
+									 select new Word() { Value = wordGroup.Key, Appeared = wordGroup.Count() };
 
-			var MostAddressedWords = from word in wordList
-									where !string.IsNullOrWhiteSpace(word) 		
-                                    orderby word
-                                    group word by word into wordGroup
-											
-                                    select new Word(){ Value = wordGroup.Key, Appeared = wordGroup.Count() };
-
-            return MostAddressedWords.OrderByDescending(word => word.Appeared).Take(10);
+			return mostAddressedWords.OrderByDescending(word => word.Appeared).Take(10);
 		}
 
-		private string RemoveImproperWords(string text)
+		private IEnumerable<string> CleanText(string text)
 		{
-			//METER um to lower aqui
-			return text
-                .Replace("a", " ")
-                .Replace("e", " ")
-                .Replace("o", " ")
-                .Replace("A", " ")
-                .Replace("E", " ")
-                .Replace("O", " ")
-                .Replace("A", " ")
-                .Replace("E", " ")
-                .Replace("O", " ")
-				.Replace("  ", " ")
-                .Replace("em", " ")
-                .Replace("por", " ")
-                .Replace("com", " ")
-                .Replace("para", " ")
-                .Replace("Em", " ")
-                .Replace("Por", " ")
-                .Replace("Com", " ")
-                .Replace("Para ", " ")
-                .Replace(" as ", " ")
-                .Replace(" os ", " ")
-                .Replace("As ", " ")
-                .Replace("Os ", " ")
-                .Replace(" ao ", " ")
-                .Replace(" no ", " ")
-                .Replace(" na ", " ")
-                .Replace(" nos ", " ")
-                .Replace(" nas ", " ")
-                .Replace(" um ", " ")
-                .Replace(" uma ", " ")
-                .Replace("Um ", " ")
-                .Replace("Uma ", " ")
-                .Replace(" uns ", " ")
-                .Replace(" umas ", " ")
-                .Replace(" á ", " ")
-                .Replace(" à ", " ")
-                .Replace(" é ", " ")
-                .Replace(" da ", " ")
-                .Replace(" do ", " ")
-                .Replace(" de ", " ")
-                .Replace(" das ", " ")
-                .Replace(" dos ", " ")
-                .Replace(" que ", " ")
-                .Replace(",", " ")
-                .Replace(".", " ")
-                .Replace("?", " ")
-                .Replace("!", " ")
-				.Replace("R$", " ")
-                .Replace("\n", " ");
+			var cleanedText = Regex.Replace(string.Join(' ', text), "<.*?>", string.Empty);
+
+			var punctuation = cleanedText.Where(Char.IsPunctuation).Distinct().ToArray();
+
+			var wordList = cleanedText.Split().Select(x => x.ToLower().Trim(punctuation));
+
+			return RemoveImproperWords(wordList);
 		}
+
+		private IEnumerable<string> RemoveImproperWords(IEnumerable<string> wordList)
+				=> (from list in wordList
+					where !ImproperWords.Any(x => x == list)
+					select list).ToList();
+
+		private static IEnumerable<string> ImproperWords
+				=> new List<string>()
+				{
+					"a","e","o","ou","em",
+					"por","com","para","as",
+					"os","ao","no","na","nos",
+					"nas","um","uma","uns","umas",
+					"á","à","é","da","do","de",
+					"das","dos","que","\n","como","r$",
+					"seu","esta","não", "se", "está",
+					"pode", "mais", "foi", "8211",
+					"este", "ser"
+				};
+
 	}
 }
