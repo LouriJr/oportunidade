@@ -10,7 +10,7 @@ using System.Xml;
 
 namespace Exercicio.MinutoSeguros.Services.Implementations
 {
-	public class FeedService : IFeedService
+	public class FeedService : Exercicio.MinutoSeguros.Services.Interfaces.IFeedService
 	{
 		private readonly IConfiguration _configuration;
 		private readonly IWordService _wordService;
@@ -21,25 +21,27 @@ namespace Exercicio.MinutoSeguros.Services.Implementations
 			_configuration = configuration;
 		}
 
-		public FeedResponse GetFeedResponse()
+		public Feed GetFeed()
 		{
-			var feed = this.GetFeed();
+			var feed = this.GetRssFeed();
 
-			var lastTenTopics = feed.Items.OrderByDescending(item => item.PublishDate).Take(10);
+			feed.Items = feed.Items.OrderByDescending(item => item.PublishDate).Take(10);
 
-			var filteredWords = feed.Items.Select(item => _wordService.ListWords(item.Content));
+			feed.Items.Select(item => item.MostAddressedWords = _wordService.ListWords(item.Content)).ToList();
 
-			return new FeedResponse()
-			{
-				LastTenTopics = lastTenTopics.Select(x => x.Title),
-				MostAddressedWords = feed.MostAddressedWords
-			};
+			// feed.Items.ForEach()
 
+			// foreach (var item in feed.Items)
+			// {
+			// 	item.MostAddressedWords = _wordService.ListWords(item.Content);
+			// }
+
+			return feed;
 		}
 
-		private Feed GetFeed()
+		private Feed GetRssFeed()
 		{
-			var url = _configuration["feedUrl"];
+			var url = "https://www.minutoseguros.com.br/blog/feed";//_configuration["feedUrl"];
 
 			using var reader = XmlReader.Create(url);
 

@@ -4,7 +4,7 @@ namespace Exercicio.MinutoSeguros.Model
 {
 	public class FeedResponse
 	{
-		public IEnumerable<string> LastTenTopics;
-		public IEnumerable<Word> MostAddressedWords;
+		public string Title { get; set; }
+		public IEnumerable<Word> MostAddressedWords { get; set; }
 	}
 }

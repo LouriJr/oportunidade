@@ -4,6 +4,6 @@ namespace Exercicio.MinutoSeguros.Services.Interfaces
 {
 	public interface IFeedService
 	{
-		FeedResponse GetFeedResponse();
+		Feed GetFeed();
 	}
 }

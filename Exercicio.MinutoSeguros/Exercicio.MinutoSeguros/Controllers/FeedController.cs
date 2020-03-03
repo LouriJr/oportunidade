@@ -1,4 +1,5 @@
 ﻿using Exercicio.MinutoSeguros.Services.Interfaces;
+using Exercicio.MinutoSeguros.Model;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -19,13 +20,18 @@ namespace Exercicio.MinutoSeguros.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Get()
-		
-		
+		public IActionResult Get()	
 		{
-			var feedResponse = _feedService.GetFeedResponse();
+			var feed = _feedService.GetFeed();
 
-			return Ok();
+			var feedResponses = feed.Items
+			.Select(item => new FeedResponse() 
+			{
+				Title = item.Title,
+				MostAddressedWords = item.MostAddressedWords
+			});
+
+			return Ok(feedResponses);
 		}
 
 	}
