@@ -21,6 +21,9 @@ namespace Exercicio.MinutoSeguros.Controllers
 		{
 			var feed = _feedService.GetFeed();
 
+			if (feed == null)
+				return StatusCode(500);
+
 			var feedResponses = feed.Items
 			.Select(item => new FeedResponse() 
 			{

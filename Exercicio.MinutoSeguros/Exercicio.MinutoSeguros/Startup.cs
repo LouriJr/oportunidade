@@ -1,3 +1,5 @@
+using Exercicio.MinutoSeguros.Clients.Implementations;
+using Exercicio.MinutoSeguros.Clients.Interfaces.Interfaces;
 using Exercicio.MinutoSeguros.Services.Implementations;
 using Exercicio.MinutoSeguros.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
@@ -21,6 +23,8 @@ namespace Exercicio.MinutoSeguros
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddControllers();
+
+			services.AddScoped<IRSSClient, RSSClient>();
 			services.AddScoped<IFeedService, FeedService>();
 			services.AddScoped<IWordService, WordService>();
 		}

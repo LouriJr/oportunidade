@@ -7,6 +7,8 @@ namespace Exercicio.MinutoSeguros.Model
 	public class Feed
 	{
 		public IEnumerable<FeedItem> Items { get; set; }
+		public Feed(){}
+
 		public Feed(SyndicationFeed syndicationFeed)
 		{
 			this.Items = syndicationFeed.Items.Select(

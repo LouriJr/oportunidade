@@ -11,6 +11,9 @@ namespace Exercicio.MinutoSeguros.Services.Implementations
 	{
 		public IEnumerable<Word> ListWords(string text)
 		{
+			if (string.IsNullOrWhiteSpace(text))
+				throw new ArgumentNullException();
+
 			var wordList = CleanText(text);
 
 			var mostAddressedWords = from word in wordList
