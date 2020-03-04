@@ -1,4 +1,4 @@
-﻿using Exercicio.MinutoSeguros.Clients;
+﻿using Exercicio.MinutoSeguros.Clients.Interfaces.Interfaces;
 using Exercicio.MinutoSeguros.Services.Implementations;
 using Exercicio.MinutoSeguros.Services.Interfaces;
 using Exercicio.MinutoSeguros.Tests.Unit.Mock;
